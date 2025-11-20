@@ -58,6 +58,13 @@ def run_scraper_db(portal_scraper, period, portal_name):
             print(f"- Coletado: {item['title']}")
             print(f"Página {item['current_page']} de {last_page}")
             
+            # --- SALVAR EM LOTES ---
+            if len(resultados) >= batch_size:
+                print(f"\n>>> Salvando lote de {len(resultados)} notícias no banco...")
+                db.insert_news(resultados, portal_name)
+                resultados = []
+                print(">>> Lote salvo e memória liberada.\n")
+            
             
         # TRABALHANDO COM O MONEYTIMES
         elif portal_name == "moneytimes":
@@ -96,6 +103,13 @@ def run_scraper_db(portal_scraper, period, portal_name):
             })
             print(f"- Coletado: {item['title']}")
             print(f"Página {item['current_page']} de {last_page}")
+            
+            # --- SALVAR EM LOTES ---
+            if len(resultados) >= batch_size:
+                print(f"\n>>> Salvando lote de {len(resultados)} notícias no banco...")
+                db.insert_news(resultados, portal_name)
+                resultados = []
+                print(">>> Lote salvo e memória liberada.\n")
             
         # TRABALHANDO COM OS OUTROS PORTAIS    
         else:
@@ -145,15 +159,11 @@ def run_scraper_db(portal_scraper, period, portal_name):
             print(f"Página {item['current_page']} de {last_page}")
             
             # --- SALVAR EM LOTES ---
-            if len(resultados) >= BATCH_SIZE:
+            if len(resultados) >= batch_size:
                 print(f"\n>>> Salvando lote de {len(resultados)} notícias no banco...")
                 db.insert_news(resultados, portal_name)
                 resultados = []
                 print(">>> Lote salvo e memória liberada.\n")
-
-        except Exception as e:
-            print(f"Erro ao processar item: {e}")
-            continue
 
     # --- SALVAR O RESTANTE ---
     if len(resultados) > 0:

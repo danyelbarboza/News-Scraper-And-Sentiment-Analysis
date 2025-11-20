@@ -1,146 +1,142 @@
-# News Portal Scraper & Sentiment Analysis
+````markdown
+# News Scraper, Sentiment Analysis & Topic Classification
 
-## Descrição
+## Description
 
-Ferramenta de web scraping desenvolvida em Python para monitorar, coletar e analisar notícias de diversos portais brasileiros. O sistema extrai artigos completos, realiza uma análise de sentimento sobre o conteúdo e armazena os dados consolidados em um banco de dados MySQL. A arquitetura é modular, orientada a objetos e permite fácil expansão para novos portais.
+A robust web scraping tool developed in Python designed to monitor, collect, and analyze news from major Brazilian portals. Beyond simple extraction, this system leverages **AI models** to perform **Sentiment Analysis** and **Zero-Shot Topic Classification** (Main Labels and Sublabels). It features a memory-efficient data pipeline that saves records in batches to a MySQL database.
 
-## Portais Suportados
+## Supported Portals
 
-1.  **G1** - Notícias gerais
-2.  **Exame** - Notícias econômicas e financeiras
-3.  **CartaCapital** - Notícias políticas e análises
-4.  **MoneyTimes** - Mercado financeiro e investimentos
-5.  **Suno** - Notícias de investimentos e finanças pessoais
+1.  **G1** - General News
+2.  **Exame** - Economics and Business
+3.  **CartaCapital** - Politics and Analysis
+4.  **MoneyTimes** - Financial Markets and Investments
+5.  **Suno** - Personal Finance and Investing
 
-## Funcionalidades Principais
+## Key Features
 
-### Extração Automatizada de Notícias
+### Automated Extraction
+- Extracts titles, links, publication dates, and full article content.
+- Supports pagination and time-based filtering (e.g., Last hour, Today, Last 7 days, Last 30 days).
+- **Duplicate Check:** Verifies existing URLs/Titles in the database before processing to avoid redundancy.
 
-  - Coleta de títulos, links, datas de publicação e conteúdo completo dos artigos.
-  - Suporte a múltiplas páginas com busca baseada em períodos de tempo definidos.
-  - Verificação de notícias duplicadas para garantir que apenas novos artigos sejam inseridos no banco de dados.
+### AI-Powered Topic Classification (New!)
+- **Zero-Shot Classification:** Uses the `facebook/bart-large-mnli` model to categorize news without specific training data.
+- **Hierarchical Labeling:**
+    - **Main Labels:** Classifies news into 13 major categories (e.g., *Politics, Economy, Technology, Health, Crime, Sports*).
+    - **Sublabels:** Automatically assigns a specific sub-context based on the main label (e.g., *Politics* -> *Elections, Legislation, Diplomacy*; *Economy* -> *Inflation, Markets, Jobs*).
 
-### Análise de Sentimentos
+### Sentiment Analysis
+- Analyzes the sentiment of the article body (Positive, Neutral, Negative).
+- Uses the `cardiffnlp/twitter-xlm-roberta-base-sentiment` model for high accuracy on multilingual text.
+- Returns both the sentiment label and a confidence score.
 
-  - Análise automática do sentimento de cada artigo (positivo, neutro ou negativo).
-  - Utiliza o modelo pré-treinado `cardiffnlp/twitter-xlm-roberta-base-sentiment` da biblioteca `transformers` para alta acurácia na classificação.
-  - Armazena o resultado da análise (sentimento e pontuação de confiança) junto com os dados da notícia.
+### Robust Data Pipeline (Batch Saving)
+- **Batch Processing:** Instead of saving all data at the end (risk of data loss) or one by one (slow), the system processes and saves news in **batches of 10**.
+- **Memory Efficiency:** Clears processed data from memory after every successful database commit.
+- **Error Handling:** If a specific news item fails, the pipeline logs the error and continues to the next item without crashing the entire scraping session.
 
-### Armazenamento em Banco de Dados
+## Technical Requirements
 
-  - Integração com MySQL para armazenamento persistente e estruturado dos dados.
-  - Salva o artigo completo, metadados (título, link, data da notícia, data da coleta) e os resultados da análise de sentimento.
+### Main Dependencies
+- **Python 3.8+**
+- **Web Scraping:** `requests`, `beautifulsoup4`, `cloudscraper` (for anti-bot protection), `fake-useragent`.
+- **Database:** `pymysql`.
+- **AI & ML:** `transformers`, `torch` (PyTorch).
+- **Utils:** `python-dotenv` (environment variables).
 
-## Requisitos Técnicos
+### Installation
 
-### Dependências Principais
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/your-username/news-scraper-classifier.git](https://github.com/your-username/news-scraper-classifier.git)
+````
 
-  - Python 3.8+
-  - Bibliotecas essenciais:
-      - `requests`
-      - `beautifulsoup4`
-      - `cloudscraper` (para portais com proteção anti-bot)
-      - `pymysql` (para conexão com o banco de dados MySQL)
-      - `python-dotenv` (para gerenciamento de credenciais)
-      - `transformers`
-      - `torch`
-      - `sentencepiece`
+2.  Install the dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *(Note: This will install PyTorch and Transformers, which may require significant disk space).*
 
-### Instalação
+## Configuration
 
-Clone o repositório e instale as dependências listadas no arquivo `requirements.txt`:
+Create a `.env` file in the root directory to configure your MySQL database connection:
 
-```bash
-pip install -r requirements.txt
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=news_database
 ```
 
-## Como Utilizar
+## Usage
 
-1.  **Configure o Ambiente**: Crie um arquivo `.env` na raiz do projeto para definir as variáveis de ambiente do seu banco de dados.
-
-    ```env
-    DB_HOST=seu_host
-    DB_USER=seu_usuario
-    DB_PASSWORD=sua_senha
-    DB_NAME=seu_banco_de_dados
-    ```
-
-2.  **Execute o Script**: Inicie o programa executando o script principal.
+1.  **Run the Main Script**:
 
     ```bash
     python src/main.py
     ```
 
-3.  **Selecione o Portal**: Escolha um dos portais listados no menu interativo.
+2.  **Interactive Menu**: Follow the terminal prompts to select the portal and the time period.
 
-      - `1` para G1
-      - `2` para Exame
-      - `3` para CartaCapital
-      - `4` para MoneyTimes
-      - `5` para Suno
-      - `6` para Todos (em desenvolvimento)
-      - `7` para Sair
+    ```plaintext
+    Bem-vindo ao Keyword Monitor!
 
-4.  **Escolha o Período**: Selecione o intervalo de tempo para a busca das notícias (as opções podem variar entre os portais).
+    Você deseja analisar qual desses portais?
+    1 - G1
+    2 - Exame
+    3 - Carta Capital
+    4 - Money Times
+    5 - Suno
+    ...
+    ```
 
-5.  **Aguarde a Coleta**: O sistema irá buscar e processar as notícias, exibindo o progresso no terminal. Ao final, os dados serão salvos no banco de dados.
+3.  **Process**: The system will scrape, classify, analyze, and save data in real-time batches.
 
-## Exemplo de Saída
+## Database Structure
 
-### Interação no Terminal
+The data is stored with the following schema, including the new classification fields:
 
-```plaintext
-Bem-vindo ao Keyword Monitor!
-Essa ferramenta coleta notícias de portais brasileiros e conta a quantidade de ocorrências de uma palavra-chave no corpo de cada artigo.
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `title` | VARCHAR | Article title |
+| `link` | VARCHAR | URL to the full article |
+| `scraping_date` | DATETIME | When the script ran |
+| `news_date` | DATETIME | When the article was published |
+| `article` | TEXT | Full content of the news |
+| `sentiment_analysis` | VARCHAR | *Positive, Negative, Neutral* |
+| `score_sentiment` | FLOAT | Confidence score (0.0 - 1.0) |
+| `main_label` | VARCHAR | e.g., *Politics, Economy* |
+| `score_main_label` | FLOAT | Confidence score for main label |
+| `sublabel` | VARCHAR | e.g., *Inflation, Elections* |
+| `score_sublabel` | FLOAT | Confidence score for sublabel |
 
-Você deseja analisar qual desses portais?
-1 - G1
-2 - Exame
-3 - Carta Capital
-4 - Money Times
-5 - Suno
-6 - Todos
-7 - Sair
-> 1
-
-Você deseja analisar qual período?
-1 - 1 hora
-2 - Hoje 
-3 - 7 dias
-> 2
-
-Verificando página 1...
-Verificando página 2...
-- Coletado: Nova política econômica é anunciada pelo governo e divide opiniões
-Página 1 de 2
-- Coletado: Mercado reage positivamente às novas medidas de incentivo
-Página 1 de 2
-
-Coleta finalizada: (2 notícias coletadas e 2 inseridas com sucesso.)
-```
-
-### Dados no Banco de Dados
-
-As notícias são salvas em uma tabela com a seguinte estrutura: `(title, link, scraping_date, news_date, article, sentiment_analysis, confidence_score)`.
-
-## Estrutura do Projeto
+## Project Structure
 
 ```
-news-portals-keyword-scraper/
+news-scraper-classifier/
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
 └── src/
-    ├── main.py                 # Script principal que inicia a aplicação
-    ├── dto/                    # Módulos de Data Transfer Object (Scrapers)
+    ├── main.py                 # Entry point
+    ├── dto/                    # Data Transfer Objects (Scrapers)
     │   ├── g1_scraper.py
     │   ├── exame_scraper.py
     │   ├── carta_scraper.py
     │   ├── moneytimes_scraper.py
     │   └── suno_scraper.py
-    └── service/                # Módulos de serviço
-        ├── run_scrapers.py     # Orquestra a execução dos scrapers
-        ├── save_database.py    # Gerencia a conexão e inserção no DB
-        ├── sentiment_analysis.py # Realiza a análise de sentimento
-        └── user_input.py       # Gerencia a entrada do usuário
+    └── service/                # Business Logic
+        ├── run_scrapers.py     # Orchestrator (Batch logic here)
+        ├── save_database.py    # Database connection & operations
+        ├── sentiment_analysis.py # Sentiment AI Wrapper
+        ├── classifier_model.py   # Categorization AI Wrapper (BART)
+        └── user_input.py       # CLI Menu
+```
+
+## License
+
+[MIT](https://www.google.com/search?q=LICENSE)
+
+```
 ```

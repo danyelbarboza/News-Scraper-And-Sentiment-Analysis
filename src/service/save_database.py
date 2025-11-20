@@ -30,11 +30,10 @@ class Database():
                         self.connection.rollback()
                     else:
                         self.connection.commit()
-            print(f"\nColeta finalizada: ({len(news_list)} notícias coletadas e {inserted_count} inseridas com sucesso.)\n")
+            print(f"\nColeta: ({len(news_list)} notícias coletadas e {inserted_count} inseridas com sucesso.)\n")
         except Exception as e:
             print(f"Erro ao inserir notícia: {e}")
-        finally:
-            self.connection.close()
+        
             
     def verify_news(self, portal_name, title, link):
         try:
