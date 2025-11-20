@@ -20,7 +20,7 @@ class Database():
         inserted_count = 0
         try:
             with self.connection.cursor() as cursor:
-                sql = f"INSERT INTO {portal_name} (portal,title, link, scraping_date, news_date, article, sentiment_analysis, score_sentiment, main_label, score_main_label, second_label, second_score, sublabel, score_sublabel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = f"INSERT INTO {portal_name} (portal,title, link, scraping_date, news_date, article, sentiment_analysis, score_sentiment, main_label, score_main_label, second_label, second_score, sublabel, score_sublabel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 for news in news_list:
                     try:
                         cursor.execute(sql, (portal_name, news['title'], news['link'], news['scraping_date'], news['news_date'], news['article'], news['sentiment_analysis'], news['score_sentiment'], news['main_label'], news['score_main_label'], news['second_label'], news['second_score'], news['sublabel'], news['score_sublabel']))

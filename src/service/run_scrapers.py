@@ -101,7 +101,7 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 "main_label": main_label,
                 "score_main_label": score_main_label,
                 "second_label": second_label,
-                "secondscore": secondscore,
+                "second_score": secondscore,
                 "sublabel": sublabel,
                 "score_sublabel": score_sublabel,
             })
