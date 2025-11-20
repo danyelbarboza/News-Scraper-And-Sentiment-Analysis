@@ -1,34 +1,27 @@
 from transformers import pipeline
 import re
+from service.sentiment_model import sentiment_pipeline
 
-class SentimentAnalysis:
-    def __init__(self):
-        self.classificador_sentimento = pipeline(
-            "sentiment-analysis",
-            model="cardiffnlp/twitter-xlm-roberta-base-sentiment",
-            truncation=True, 
-            max_length=512
-        )
-
-    def analyze(self, news_list):
+class SentimentAnalysis():
+    @staticmethod
+    def analyze(article):
         caracteres = 150
         analysis = []
+        
+        if not isinstance(article, str) or len(article.strip()) == 0:
+            print("Artigo inválido ou None ->", article)
+            return None, None
 
-        for news in news_list:
-            text = news['article'][:caracteres].ljust(caracteres)
+        # tentar criar o texto com try/except
+        try:
+            text = article[:caracteres].ljust(caracteres)
             text = re.sub(r'["\']', '', text)
+        except Exception as e:
+            print("Erro ao preparar texto:", e)
+            return None, None
 
-            resultado = self.classificador_sentimento(text)
-            label = resultado[0]['label']
-            score = resultado[0]['score']
-            rounded_score = round(score, 2)
-            analysis.append({
-                "title": news['title'],
-                "link": news['link'],
-                "scraping_date": news['scraping_date'],
-                "news_date": news['news_date'],
-                "article": news['article'],
-                "sentiment_analysis": label,
-                "confidence_score": rounded_score
-            })
-        return analysis
+        resultado = sentiment_pipeline(text)
+        label = resultado[0]['label']
+        score = resultado[0]['score']
+        rounded_score = round(score, 2)
+        return label, rounded_score
