@@ -2,15 +2,15 @@
 
 ## Description
 
-A robust web scraping tool developed in Python designed to monitor, collect, and analyze news from major Brazilian portals. Beyond simple extraction, this system leverages **AI models** to perform **Sentiment Analysis** and **Zero-Shot Topic Classification** (Main Labels and Sublabels). It features a memory-efficient data pipeline that saves records in batches to a MySQL database.
+A robust web scraping tool developed in Python designed to monitor, collect, and analyze news from major Brazilian portals. Beyond simple extraction, this system leverages AI models to perform Sentiment Analysis and Zero-Shot Topic Classification (Main Labels and Sublabels). It features a memory-efficient data pipeline that saves records in batches to a MySQL database.
 
 ## Supported Portals
 
-1.  **G1** - General News
-2.  **Exame** - Economics and Business
-3.  **CartaCapital** - Politics and Analysis
-4.  **MoneyTimes** - Financial Markets and Investments
-5.  **Suno** - Personal Finance and Investing
+1. **G1** - General News
+2. **Exame** - Economics and Business
+3. **CartaCapital** - Politics and Analysis
+4. **MoneyTimes** - Financial Markets and Investments
+5. **Suno** - Personal Finance and Investing
 
 ## Key Features
 
@@ -49,9 +49,9 @@ A robust web scraping tool developed in Python designed to monitor, collect, and
 1. Clone the repository:
    ```bash
    git clone [https://github.com/your-username/news-scraper-classifier.git](https://github.com/your-username/news-scraper-classifier.git)
-````
+   ```
 
-2.  Install the dependencies:
+2. Install the dependencies:
     ```bash
     pip install -r requirements.txt
     ```
@@ -70,7 +70,7 @@ DB_NAME=news_database
 
 ## Usage
 
-1.  **Run the Main Script**:
+1. **Run the Main Script**:
 
     ```bash
     python src/main.py
@@ -131,10 +131,4 @@ news-scraper-classifier/
         ├── sentiment_analysis.py # Sentiment AI Wrapper
         ├── classifier_model.py   # Categorization AI Wrapper (BART)
         └── user_input.py       # CLI Menu
-```
-
-## License
-
-[MIT](https://www.google.com/search?q=LICENSE)
-
 ```
