@@ -41,7 +41,8 @@ class ClassifierModel:
         secondscore = result['scores'][1]
         score = result['scores'][0]
         score_rounded = round(score, 2)
-        return label, score_rounded, second_label, secondscore
+        second_score_rounded = round(second_score, 2)
+        return label, score_rounded, second_label, second_score_rounded
 
 
     def classify_sublabel(self, text, main_label, second_label):
