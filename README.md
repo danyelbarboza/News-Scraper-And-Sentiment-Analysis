@@ -1,4 +1,3 @@
-````markdown
 # News Scraper, Sentiment Analysis & Topic Classification
 
 ## Description
