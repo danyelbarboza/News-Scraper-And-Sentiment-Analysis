@@ -24,7 +24,6 @@ class G1Scraper():
                 continue
             soup = BeautifulSoup(res.text, "html.parser")
             articles = soup.find_all("div", class_="feed-post-body")
-            time.sleep(random.uniform(0.3, 0.6))
             for article in articles:
                 last_page = pagina
                 title_tag = article.find("a", class_="feed-post-link")
@@ -53,7 +52,7 @@ class G1Scraper():
             res = requests.get(f"https://g1.globo.com/ultimas-noticias/index/feed/pagina-{paginas}.ghtml")
             soup = BeautifulSoup(res.text, "html.parser")
             articles = soup.find_all("div", class_="feed-post-body")
-            time.sleep(random.uniform(0.1, 0.5))
+            time.sleep(random.uniform(0.1, 0.3))
             stop = False
             print(f"Verificando página {paginas - 1}...")
             for article in articles:

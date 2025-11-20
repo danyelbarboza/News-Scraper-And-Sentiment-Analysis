@@ -12,14 +12,14 @@ class ClassifierModel:
     candidate_labels = [
         "politics", "economy", "technology", "science", "health",
         "education", "environment", "crime", "entertainment",
-        "sports", "culture", "other", "curiosities"
+        "sports", "culture", "other", "curiosities", "lifestyle"
     ]
 
     # Mapeamento de sublabels
     sublabels_map = {
         "politics": ["elections", "legislation", "government", "diplomacy", "policy"],
         "economy": ["markets", "trade", "finance", "jobs", "inflation"],
-        "technology": ["ai", "gadgets", "software", "hardware", "internet"],
+        "technology": ["artificial_intelligence", "gadgets", "software", "hardware", "internet", "tech_finance"],
         "science": ["biology", "physics", "chemistry", "space", "research"],
         "health": ["diseases", "nutrition", "mental_health", "fitness", "medicine"],
         "education": ["schools", "universities", "online_learning", "research", "policy"],
@@ -28,17 +28,21 @@ class ClassifierModel:
         "entertainment": ["movies", "tv", "music", "theater", "celebrities"],
         "sports": ["football", "basketball", "tennis", "olympics", "athletes"],
         "culture": ["art", "literature", "traditions", "festivals", "history"],
-        "other": ["miscellaneous", "general", "opinion", "events", "trends"],
-        "curiosities": ["weird_news", "facts", "history_bits", "records", "oddities"]
+        "other": ["miscellaneous", "trends", "opinion", "events", "trends"],
+        "curiosities": ["weird_news", "facts", "history_bits", "records", "oddities"],
+        "lifestyle": ["health_wellness", "fashion_beauty", "travel_leisure", "food_drink", "home_living"]
     }
 
     def classify_label(self, text, labels=candidate_labels):
         """Classifica o texto nas labels principais e retorna a primeira com score."""
         result = self.classifier(text, candidate_labels=labels)
         label = result['labels'][0]
+        second_label = result['labels'][1]
+        secondscore = result['scores'][1]
         score = result['scores'][0]
         score_rounded = round(score, 2)
-        return label, score_rounded
+        return label, score_rounded, second_label, secondscore
+
 
     def classify_sublabel(self, text, main_label):
         """Classifica o texto nas sublabels da label principal."""
@@ -50,9 +54,9 @@ class ClassifierModel:
         return result['labels'][0], score_rounded
     
     def classify_text(self, text):
-        main_label, score_main_label = self.classify_label(text)
+        main_label, score_main_label, second_label, secondscore = self.classify_label(text)
         sublabel, score_sublabel = self.classify_sublabel(text, main_label)
-        return main_label, score_main_label, sublabel, score_sublabel
+        return main_label, score_main_label, second_label, secondscore, sublabel, score_sublabel
 
 
 """"

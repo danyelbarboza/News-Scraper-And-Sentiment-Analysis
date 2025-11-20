@@ -39,7 +39,7 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 if diference > timedelta(days=7):
                     break
             
-            main_label, score_main_label, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
+            main_label, score_main_label, second_label, secondscore, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
             sentiment_analysis, score_sentiment = SentimentAnalysis().analyze(full_article)   
             
             resultados.append({
@@ -52,6 +52,8 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 "score_sentiment": score_sentiment,
                 "main_label": main_label,
                 "score_main_label": score_main_label,
+                "second_label": second_label,
+                "second_score": secondscore,
                 "sublabel": sublabel,
                 "score_sublabel": score_sublabel,
             })
@@ -85,7 +87,7 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 if diference > timedelta(days=30):
                     break 
             
-            main_label, score_main_label, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
+            main_label, score_main_label, second_label, secondscore, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
             sentiment_analysis, score_sentiment = SentimentAnalysis().analyze(full_article)   
             
             resultados.append({
@@ -98,6 +100,8 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 "score_sentiment": score_sentiment,
                 "main_label": main_label,
                 "score_main_label": score_main_label,
+                "second_label": second_label,
+                "secondscore": secondscore,
                 "sublabel": sublabel,
                 "score_sublabel": score_sublabel,
             })
@@ -139,7 +143,7 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 if diference > timedelta(days=30):
                     break
             
-            main_label, score_main_label, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
+            main_label, score_main_label, second_label, secondscore, sublabel, score_sublabel = classifier_model.classify_text(item['title'])
             sentiment_analysis, score_sentiment = SentimentAnalysis().analyze(full_article)   
             
             resultados.append({
@@ -152,6 +156,8 @@ def run_scraper_db(portal_scraper, period, portal_name):
                 "score_sentiment": score_sentiment,
                 "main_label": main_label,
                 "score_main_label": score_main_label,
+                "second_label": second_label,
+                "second_score": secondscore,
                 "sublabel": sublabel,
                 "score_sublabel": score_sublabel,
             })
