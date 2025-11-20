@@ -44,18 +44,21 @@ class ClassifierModel:
         return label, score_rounded, second_label, secondscore
 
 
-    def classify_sublabel(self, text, main_label):
+    def classify_sublabel(self, text, main_label, second_label):
         """Classifica o texto nas sublabels da label principal."""
-        sublabels = self.sublabels_map.get(main_label, [])
-        if not sublabels:
+        main_sublabels = self.sublabels_map.get(main_label, [])
+        second_sublabels = self.sublabels_map.get(second_label, [])
+        if not main_sublabels or not second_sublabels:
             return None, None
-        result = self.classifier(text, candidate_labels=sublabels)
+        main_sublabels.extend(second_sublabels)
+        result = self.classifier(text, candidate_labels=main_sublabels)
         score_rounded = round(result['scores'][0], 2)
         return result['labels'][0], score_rounded
     
     def classify_text(self, text):
+        """Classifica o texto nas labels principais e sublabels."""
         main_label, score_main_label, second_label, secondscore = self.classify_label(text)
-        sublabel, score_sublabel = self.classify_sublabel(text, main_label)
+        sublabel, score_sublabel = self.classify_sublabel(text, main_label, second_label)
         return main_label, score_main_label, second_label, secondscore, sublabel, score_sublabel
 
 

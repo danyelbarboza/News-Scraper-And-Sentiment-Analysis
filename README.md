@@ -23,8 +23,9 @@ A robust web scraping tool developed in Python designed to monitor, collect, and
 - **Zero-Shot Classification:** Uses the `facebook/bart-large-mnli` model to categorize news without specific training data.
 - **Hierarchical Labeling:**
     - **Main Labels:** Classifies news into 13 major categories (e.g., *Politics, Economy, Technology, Health, Crime, Sports*).
+    - **Second Labels:** Identifies the second most probable category to provide broader context (e.g., a news item about tax reform might be classified primarily as *Politics* but secondarily as *Economy*).
     - **Sublabels:** Automatically assigns a specific sub-context based on the main label (e.g., *Politics* -> *Elections, Legislation, Diplomacy*; *Economy* -> *Inflation, Markets, Jobs*).
-
+  
 ### Sentiment Analysis
 - Analyzes the sentiment of the article body (Positive, Neutral, Negative).
 - Uses the `cardiffnlp/twitter-xlm-roberta-base-sentiment` model for high accuracy on multilingual text.
@@ -107,8 +108,11 @@ The data is stored with the following schema, including the new classification f
 | `score_sentiment` | FLOAT | Confidence score (0.0 - 1.0) |
 | `main_label` | VARCHAR | e.g., *Politics, Economy* |
 | `score_main_label` | FLOAT | Confidence score for main label |
+| `second_label` | VARCHAR | The second most likely category |
+| `second_score` | FLOAT | Confidence score for second label |
 | `sublabel` | VARCHAR | e.g., *Inflation, Elections* |
 | `score_sublabel` | FLOAT | Confidence score for sublabel |
+
 
 ## Project Structure
 
